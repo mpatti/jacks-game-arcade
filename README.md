@@ -9,6 +9,7 @@ Play: https://mpatti.github.io/jacks-game-arcade/
 - `games/star-surfer/` — Jack's Star Surfer
 - `games/cube-beat-dash/` — Jack's Cube Beat Dash
 - `games/galaxy-strike/` — Jack's Galaxy Strike 3D
+- `games/tactical-ops/` — Jack's Steelpoint Ops 3D
 
 The shared `assets/` folder contains game libraries used by multiple games.
 
