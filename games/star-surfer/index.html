@@ -171,6 +171,9 @@
     .skinChoice { padding: 4px 3px; }
   }
   @media (max-width: 520px) {
+    #top { left: 6px; right: 6px; gap: 4px; }
+    .pill { min-width: 0; padding: 6px 5px; font-size: clamp(12px, 4vw, 18px); }
+    #hearts { letter-spacing: 0; }
     .levels { grid-template-columns: repeat(3, 1fr); }
     .levelChoice { min-height: 62px; }
   }
@@ -199,7 +202,7 @@
 </head>
 <body>
 <a class="arcadeHome" href="../../">← ARCADE</a>
-<canvas id="game" aria-label="Jack's Star Surfer game. Tap anywhere to jump."></canvas>
+<canvas id="game" aria-label="Jack's Star Surfer game. Tap to jump or hold to jump higher."></canvas>
 <div id="top">
   <div class="pill"><span id="hearts">❤️ 1 LIFE</span></div>
   <div class="pill" id="levelBadge">🌙 L1</div>
@@ -210,7 +213,7 @@
   <div id="card">
     <h1>STAR<br>SURFER</h1>
     <div id="subtitle">Pick a world—or tap to play Moon!</div>
-    <div class="tap">TAP ANYWHERE</div>
+    <div class="tap">HOLD TO JUMP HIGHER</div>
     <div class="levels" id="levelChoices" aria-label="Choose a level">
       <a class="levelChoice active" data-level="0" href="#moon"><span><span class="levelIcon">🌙</span><span class="levelText">L1 MOON</span></span></a>
       <a class="levelChoice" data-level="1" href="#orb"><span><span class="levelIcon">🟡</span><span class="levelText">L2 ORBS</span></span></a>
@@ -227,7 +230,7 @@
     <div id="tip">One normal jump—special levels add orbs and pads!</div>
   </div>
 </div>
-<div id="tiny">No buttons — just tap anywhere ✨</div>
+<div id="tiny" class="hidden">Tap or hold anywhere ✨</div>
 <script>
 (() => {
   'use strict';
@@ -257,7 +260,7 @@
     {
       name: 'Moon Run', icon: '🌙', label: 'L1', speed: .90, gap: .28, accel: 2.8,
       gravity: 1, jumpPower: .82, orbChance: 0, padChance: 0, blockChance: .34, movingSpikes: false,
-      hint: 'Jump on blocks and dodge spikes—one jump only!',
+      hint: 'Tap to jump—hold for a higher jump!',
       sky: ['#16034f','#5b159f','#f22ca7'], planet: '#ffdd5b', crater: 'rgba(203,109,228,.4)',
       mountains: 'rgba(24,4,81,.42)', ground: ['#32126e','#5d25ad','#a54de0','#28105c'],
       neon: '#78fff0', glow: '#29ffe8', rider: '#ff55d7', dangerHue: 205
@@ -265,7 +268,7 @@
     {
       name: 'Orb Garden', icon: '🟡', label: 'L2', speed: .97, gap: .18, accel: 3.3,
       gravity: 1, jumpPower: .82, orbChance: .72, padChance: 0, blockChance: .36, movingSpikes: false,
-      hint: 'Jump on blocks, then TAP a glowing orb for an air boost!',
+      hint: 'Hold to jump higher, then tap an orb for an air boost!',
       sky: ['#063f76','#00a9c7','#ff6fcf'], planet: '#bffcff', crater: 'rgba(255,92,190,.35)',
       mountains: 'rgba(27,62,130,.38)', ground: ['#ff7ed8','#ec4fbf','#9c32c6','#67239b'],
       neon: '#fff86a', glow: '#fff23d', rider: '#54fff1', dangerHue: 310
@@ -273,7 +276,7 @@
     {
       name: 'Launch Lab', icon: '🚀', label: 'L3', speed: 1.02, gap: .10, accel: 3.8,
       gravity: 1, jumpPower: .82, orbChance: 0, padChance: .72, blockChance: .38, movingSpikes: false,
-      hint: 'Land on blocks or hit a pad—it blasts higher than an orb!',
+      hint: 'Hold to jump higher—pads blast even higher!',
       sky: ['#260018','#8c0924','#ff6a19'], planet: '#ffb126', crater: 'rgba(118,0,14,.38)',
       mountains: 'rgba(52,0,21,.55)', ground: ['#3b0610','#781014','#b52a14','#26040a'],
       neon: '#ffdc3d', glow: '#ff6b16', rider: '#ff8b36', dangerHue: 8
@@ -281,7 +284,7 @@
     {
       name: 'Ice Orbit', icon: '❄️', label: 'L4', speed: 1.06, gap: .02, accel: 4.1,
       gravity: .78, jumpPower: .75, orbChance: .42, padChance: .42, blockChance: .42, movingSpikes: false,
-      hint: 'Low gravity! Use both orbs and super launch pads.',
+      hint: 'Low gravity! Hold jumps, plus orbs and launch pads.',
       sky: ['#021a55','#176cbd','#8ff5ff'], planet: '#e8ffff', crater: 'rgba(67,143,214,.33)',
       mountains: 'rgba(8,45,112,.48)', ground: ['#164b8b','#2b8bd1','#75ddf5','#0e356f'],
       neon: '#d8ffff', glow: '#54e8ff', rider: '#7d7cff', dangerHue: 188
@@ -289,7 +292,7 @@
     {
       name: 'Galaxy Rush', icon: '🌌', label: 'L5', speed: 1.14, gap: -.08, accel: 4.8,
       gravity: 1.05, jumpPower: .84, orbChance: .48, padChance: .48, blockChance: .46, movingSpikes: true,
-      hint: 'Final level: moving spikes, blocks, orbs, and pads!',
+      hint: 'Hold to jump—dodge moving spikes and use boosts!',
       sky: ['#09001f','#35116f','#c52ad8'], planet: '#71ffdf', crater: 'rgba(107,40,173,.42)',
       mountains: 'rgba(10,0,40,.58)', ground: ['#170632','#3a0b67','#741894','#0e021e'],
       neon: '#ff76ef', glow: '#d83cff', rider: '#fff45c', dangerHue: 260
@@ -300,6 +303,7 @@
   let last = performance.now();
   let lastInput = -Infinity;
   let audio = null;
+  let jumpHeld = false;
 
   const game = {
     mode: 'ready',
@@ -328,7 +332,7 @@
 
   const rider = {
     x: 0, y: 0, w: 70, h: 70,
-    vy: 0, jumps: 0, angle: 0,
+    vy: 0, jumps: 0, angle: 0, holdTime: 0,
     invincible: 0, squash: 1
   };
 
@@ -407,6 +411,7 @@
     rider.y = groundY - rider.h;
     rider.vy = 0;
     rider.jumps = 0;
+    rider.holdTime = 0;
     rider.angle = 0;
     rider.invincible = 0;
     updateLevelUI();
@@ -418,6 +423,7 @@
 
   function endGame() {
     game.mode = 'gameover';
+    setJumpHeld(false);
     rider.vy = 0;
     if (game.distance > game.best) {
       game.best = game.distance;
@@ -428,19 +434,24 @@
     tip.textContent = `Best: ${game.best} m — replay or pick another level!`;
     document.querySelector('.tap').textContent = 'TAP TO PLAY AGAIN';
     message.classList.remove('hidden');
-    tiny.classList.remove('hidden');
+    tiny.classList.add('hidden');
     boom(rider.x + rider.w / 2, rider.y + rider.h / 2, '#ff58e7', 30);
     sound('crash');
   }
 
   function jump() {
     if (rider.jumps >= 1) return false;
-    rider.vy = -Math.max(560, H * currentLevel().jumpPower);
+    rider.vy = -Math.max(600, H * currentLevel().jumpPower * 1.07);
     rider.jumps = 1;
+    rider.holdTime = 0;
     rider.squash = 0.72;
     puff(rider.x + rider.w * 0.45, rider.y + rider.h, '#75fff2', 11);
     sound('jump');
     return true;
+  }
+
+  function setJumpHeld(value) {
+    jumpHeld = !!value;
   }
 
   function inputPoint(e) {
@@ -483,6 +494,7 @@
 
   function handleInput(e) {
     if (e && e.cancelable) e.preventDefault();
+    setJumpHeld(true);
     const now = performance.now();
     if (now - lastInput < 110) return;
     lastInput = now;
@@ -504,6 +516,10 @@
     }
     if (game.mode === 'ready' || game.mode === 'gameover') startGame();
     else if (game.mode === 'running' && !tryOrbBoost(e)) jump();
+  }
+
+  function releaseInput() {
+    setJumpHeld(false);
   }
 
   function wakeAudio() {
@@ -588,7 +604,7 @@
   }
 
   function spawnStar() {
-    const heights = [groundY - rider.h * 1.3, groundY - rider.h * 2.2, groundY - rider.h * 3.0];
+    const heights = [groundY - rider.h * 1.25, groundY - rider.h * 1.75, groundY - rider.h * 2.15];
     const y = heights[Math.floor(Math.random() * heights.length)];
     game.pickups.push({ x: W + 34, y, r: Math.max(17, Math.min(24, W * .04)), spin: Math.random() * 6, got: false });
   }
@@ -661,7 +677,9 @@
 
       const previousBottom = rider.y + rider.h;
       const gravity = Math.max(2050, H * 3.05) * level.gravity;
-      rider.vy += gravity * dt;
+      const extendingJump = jumpHeld && rider.vy < 0 && rider.holdTime < .24;
+      rider.vy += gravity * (extendingJump ? .42 : 1) * dt;
+      if (extendingJump) rider.holdTime += dt;
       rider.y += rider.vy * dt;
       if (rider.y >= groundY - rider.h) {
         rider.y = groundY - rider.h;
@@ -1109,11 +1127,20 @@
   window.addEventListener('pointerdown', handleInput, { passive: false });
   window.addEventListener('touchstart', handleInput, { passive: false });
   window.addEventListener('mousedown', handleInput, { passive: false });
+  window.addEventListener('pointerup', releaseInput, { passive: true });
+  window.addEventListener('pointercancel', releaseInput, { passive: true });
+  window.addEventListener('touchend', releaseInput, { passive: true });
+  window.addEventListener('touchcancel', releaseInput, { passive: true });
+  window.addEventListener('mouseup', releaseInput, { passive: true });
+  window.addEventListener('blur', releaseInput);
   window.addEventListener('keydown', e => {
     if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'Enter') handleInput(e);
   });
+  window.addEventListener('keyup', e => {
+    if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'Enter') releaseInput();
+  });
   window.addEventListener('resize', resize);
-  document.addEventListener('visibilitychange', () => { last = performance.now(); });
+  document.addEventListener('visibilitychange', () => { last = performance.now(); if (document.hidden) releaseInput(); });
 
   resize();
   updateLevelUI();
