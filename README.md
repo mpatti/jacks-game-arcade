@@ -8,6 +8,7 @@ Play: https://mpatti.github.io/jacks-game-arcade/
 
 - `games/star-surfer/` — Jack's Star Surfer
 - `games/cube-beat-dash/` — Jack's Cube Beat Dash
+- `games/wave-dasher/` — Jack's Wave Dasher
 - `games/galaxy-strike/` — Jack's Galaxy Strike 3D
 - `games/tactical-ops/` — Jack's Steelpoint Ops 3D
 

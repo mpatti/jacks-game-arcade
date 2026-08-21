@@ -58,6 +58,14 @@
   .spikes i{display:block;width:0;height:0;border-left:27px solid transparent;border-right:27px solid transparent;border-bottom:66px solid #ff653b;filter:drop-shadow(0 -5px 0 var(--black))}
   @keyframes surfer{0%,100%{translate:0 0;rotate:-4deg}50%{translate:0 -29px;rotate:10deg}}
 
+  .waveArt{background:linear-gradient(145deg,#08052a,#271070 58%,#75146e)}
+  .waveArt::before{content:"";position:absolute;inset:0;opacity:.25;background-image:linear-gradient(#59f7ff 2px,transparent 2px),linear-gradient(90deg,#59f7ff 2px,transparent 2px);background-size:42px 42px}
+  .waveTop,.waveBottom{position:absolute;left:-4%;width:108%;height:92px;border:6px solid var(--black);background:#36105f;box-shadow:0 0 0 7px #ff4fce,0 0 28px #ff4fce;transform:skewY(-7deg)}.waveTop{top:-42px}.waveBottom{bottom:-46px;background:#0a4770;box-shadow:0 0 0 7px #59f7ff,0 0 28px #59f7ff;transform:skewY(7deg)}
+  .waveTrail{position:absolute;left:10%;top:77%;width:46%;height:9px;border-radius:99px;background:linear-gradient(90deg,transparent,#ff4fce,#59f7ff);box-shadow:0 0 19px #59f7ff;transform:rotate(-45deg);transform-origin:left center}.waveTrail::after{content:"";position:absolute;left:100%;top:0;width:46%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#59f7ff,#fff36a);box-shadow:0 0 19px #fff36a;transform:rotate(90deg);transform-origin:left center}
+  .waveShip{position:absolute;left:51%;top:36%;width:58px;height:42px;background:#fff36a;clip-path:polygon(100% 50%,0 0,20% 50%,0 100%);filter:drop-shadow(0 0 8px #59f7ff) drop-shadow(0 5px 0 var(--black));transform:rotate(-45deg);animation:waveFly 1.05s steps(2,end) infinite}
+  .waveCrystal{position:absolute;width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:46px solid #59f7ff;filter:drop-shadow(0 4px 0 var(--black))}.waveCrystal.c1{right:22%;top:0}.waveCrystal.c2{right:9%;bottom:0;rotate:180deg;border-top-color:#fff36a}
+  @keyframes waveFly{0%,100%{translate:0 -10px;rotate:0deg}50%{translate:20px 18px;rotate:90deg}}
+
   .beatArt{background:linear-gradient(145deg,#081c66,#5137db 48%,#ff4fac)}
   .beatArt::before{content:"7 × 6 = ?";position:absolute;right:5%;top:8%;padding:7px 12px;border:4px solid var(--black);border-radius:999px;background:#fff;color:var(--black);font-size:clamp(16px,3vw,25px);font-weight:950;transform:rotate(4deg)}
   .piano{position:absolute;left:0;right:0;bottom:0;height:76px;display:grid;grid-template-columns:repeat(10,1fr);background:#fff;border-top:5px solid var(--black)}
@@ -107,7 +115,7 @@
   <div class="grid"></div>
   <nav>
     <div class="brand">🎮 JACK'S GAME GALAXY</div>
-    <div class="count">4 GAMES</div>
+    <div class="count">5 GAMES</div>
   </nav>
   <div class="heroInner">
     <div class="kicker">✨ Pick it. Tap it. Play it.</div>
@@ -151,6 +159,18 @@
         <h3>Jack's Cube Beat Dash</h3>
         <p>Race a Rubik's cube, collect piano notes, and solve quick math puzzles across five levels.</p>
         <span class="play">PLAY CUBE BEAT DASH <b>▶</b></span>
+      </div>
+    </a>
+
+    <a class="gameCard" href="games/wave-dasher/" aria-label="Play Jack's Wave Dasher">
+      <div class="art waveArt">
+        <div class="waveTop"></div><div class="waveBottom"></div><div class="waveTrail"></div><div class="waveShip"></div><div class="waveCrystal c1"></div><div class="waveCrystal c2"></div>
+      </div>
+      <div class="cardBody">
+        <span class="tag">One-button neon flight</span>
+        <h3>Jack's Wave Dasher</h3>
+        <p>Hold to fly up at 45°, let go to dive down at 45°, and thread an endless crystal tunnel.</p>
+        <span class="play">PLAY WAVE DASHER <b>▶</b></span>
       </div>
     </a>
 
